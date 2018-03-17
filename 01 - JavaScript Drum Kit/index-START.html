@@ -58,7 +58,25 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+function playSound(e){
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`); //querySelector(string) finds the element in the document that matches the query inside
+                                                                          //audio element with data-key attribute
+                                                                          //ES6 ${} allows logic inside of expression
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`) //this one requires a . in front because it's looking for a CSS class
+  if(!audio) return; //!variable means null variable
+  audio.currentTime=0;//rewinds tape
+  audio.play();//plays tape
+  key.classList.add('playing');//adds playing css style (will be removed later)
+}
 
+function removeTransition(e){
+  if (e.propertyName !== 'transform') return;//if it's not 'transform' don't remove class on it
+  this.classList.remove('playing');//remove playing class on transition end
+}
+//event listeners go at the bottom
+const keys = document.querySelectorAll('.key');//gives a list of all items in center row
+keys.forEach(key => key.addEventListener('transitionend', removeTransition))//adds listener to each item using lambda
+window.addEventListener('keydown', playSound);//keydown is playsound
 </script>
 
 
